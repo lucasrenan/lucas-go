@@ -1,0 +1,6 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - '$GOPATH/src/github.com/lucasrenan/lucas-go:/go/src/github.com/lucasrenan/lucas-go'
