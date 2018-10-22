@@ -25,8 +25,8 @@ func fib(n int) int {
 
 func main() {
 	fmt.Println("hello world")
-	fmt.Println("sum(1, 10) = %d\n", sum(1, 10))
-	fmt.Println("fib(10) = %d\n", fib(10))
+	fmt.Printf("sum(1, 10) = %d\n", sum(1, 10))
+	fmt.Printf("fib(10) = %d\n", fib(10))
 
 	s := "Hello"
 	for i := range s {
@@ -34,14 +34,28 @@ func main() {
 	}
 
 	for i, c := range s {
-		fmt.Println("%d: %c\n", i, c)
+		fmt.Printf("%d: %c\n", i, c)
 	}
 
 	for i, c := range s[1:3] {
-		fmt.Println("%d: %c\n", i, c)
+		fmt.Printf("%d: %c\n", i, c)
 	}
 
 	for _, c := range s {
 		fmt.Println(c)
+	}
+
+	heroes := map[string]string{
+		"Superman":     "Clark Kent",
+		"Batman":       "Bruce Wayne",
+		"Wonder Woman": "Diana Prince",
+	}
+
+	for h := range heroes {
+		fmt.Println(h)
+	}
+
+	for k, v := range heroes {
+		fmt.Printf("%s is %s\n", k, v)
 	}
 }
