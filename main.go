@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func sum(start int, end int) int {
@@ -57,5 +58,14 @@ func main() {
 
 	for k, v := range heroes {
 		fmt.Printf("%s is %s\n", k, v)
+	}
+
+	start := time.Now()
+	end := start.Add(3 * time.Second)
+	for range time.Tick(time.Second) {
+		fmt.Println("tick")
+		if time.Now().After(end) {
+			break
+		}
 	}
 }
