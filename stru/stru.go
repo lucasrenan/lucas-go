@@ -16,6 +16,31 @@ func (p *Point) Move(dx, dy int) {
 	p.Y += dy
 }
 
+// Mover interface
+type Mover interface {
+	Move(dx, dy int)
+}
+
+// Player is a player
+type Player struct {
+	Point
+	Name string
+}
+
+// NewPlayer is a function
+func NewPlayer(name string, x, y int) *Player {
+	return &Player{
+		Point: Point{x, y},
+		Name:  name,
+	}
+}
+
+func moveAll(items []Mover, dx, dy int) {
+	for _, m := range items {
+		m.Move(dx, dy)
+	}
+}
+
 func main() {
 	p1 := Point{1, 2}
 	fmt.Println("p1", p1)
@@ -33,4 +58,12 @@ func main() {
 
 	p1.Move(10, 20)
 	fmt.Printf("p1 after move: %+v\n", p1)
+
+	alice := NewPlayer("Alice", 10, 20)
+	fmt.Printf("%+v\n", alice)
+
+	ms := []Mover{&p1, &p2, alice}
+	fmt.Println("ms before:", p1, p2, *alice)
+	moveAll(ms, 20, 30)
+	fmt.Println("ms after:", p1, p2, *alice)
 }
