@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Response struct {
@@ -43,6 +45,28 @@ func simpleGet() {
 	fmt.Println(rep)
 }
 
+func timeoutGet() {
+	req, err := http.NewRequest("GET", "http://httpbin.org/get", nil)
+	if err != nil {
+		fmt.Printf("error: %s\n", err)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
+	defer cancel()
+
+	req = req.WithContext(ctx)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("error: %s\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	fmt.Printf("with timeout status: %d\n", resp.StatusCode)
+}
+
 func main() {
 	simpleGet()
+	timeoutGet()
 }
