@@ -1,11 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -66,7 +69,31 @@ func timeoutGet() {
 	fmt.Printf("with timeout status: %d\n", resp.StatusCode)
 }
 
+func post() {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	request := map[string]interface{}{
+		"id":   1,
+		"type": "create",
+		"data": "test data",
+	}
+
+	if err := enc.Encode(request); err != nil {
+		fmt.Printf("error: can't encode - %s\n", err)
+		return
+	}
+
+	resp, err := http.Post("http://httpbin.org/post", "application/json", &buf)
+	if err != nil {
+		fmt.Printf("error post: %s\n", err)
+		return
+	}
+
+	io.Copy(os.Stdout, resp.Body)
+}
+
 func main() {
 	simpleGet()
 	timeoutGet()
+	post()
 }
