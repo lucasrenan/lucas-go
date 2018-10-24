@@ -92,8 +92,28 @@ func post() {
 	io.Copy(os.Stdout, resp.Body)
 }
 
+func auth() {
+	user, passwd := "bugs", "duck season"
+	url := fmt.Sprintf("http://httpbin.org/basic-auth/%s/%s", user, passwd)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("error auth: %s\n", err)
+		return
+	}
+
+	req.SetBasicAuth(user, passwd)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("error auth: %s\n", err)
+		return
+	}
+
+	io.Copy(os.Stdout, resp.Body)
+}
+
 func main() {
-	simpleGet()
-	timeoutGet()
-	post()
+	// simpleGet()
+	// timeoutGet()
+	// post()
+	auth()
 }
