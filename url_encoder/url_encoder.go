@@ -50,8 +50,23 @@ func newHandler(w http.ResponseWriter, r *http.Request) {
 	enc.Encode(reply)
 }
 
+func dumpHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method is not GET", http.StatusMethodNotAllowed)
+		return
+	}
+
+	dbLock.RLock()
+	defer dbLock.RUnlock()
+
+	w.Header().Set("Content-Type", "application/json")
+	enc := json.NewEncoder(w)
+	enc.Encode(db)
+}
+
 func main() {
 	http.HandleFunc("/_/ping", pingHandler)
+	http.HandleFunc("/_/dump", dumpHandler)
 	http.HandleFunc("/v1/new", newHandler)
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
